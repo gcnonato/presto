@@ -119,12 +119,13 @@ public class CassandraRecordCursor
     @Override
     public Slice getSlice(int i)
     {
+        Object value = CassandraType.getColumnValue(currentRow, i, fullCassandraTypes.get(i));
         switch (getCassandraType(i)) {
             case BLOB:
             case CUSTOM:
-                return wrappedBuffer((java.nio.ByteBuffer) CassandraType.getColumnValue(currentRow, i, fullCassandraTypes.get(i)));
+                return wrappedBuffer((java.nio.ByteBuffer) value);
             default:
-                return utf8Slice(CassandraType.getColumnValue(currentRow, i, fullCassandraTypes.get(i)).toString());
+                return utf8Slice(value.toString());
         }
     }
 
